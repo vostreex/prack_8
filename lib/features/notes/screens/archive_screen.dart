@@ -72,7 +72,7 @@ class _ArchiveScreenState extends State<ArchiveScreen> {
           TextButton(
             onPressed: () {
               setState(() {
-                NoteInherited.of(context).repository.deleteNote(id);
+                GetIt.I<NoteRepository>().deleteNote(id);
                 _filterNotes();
               });
               Navigator.of(context).pop();
