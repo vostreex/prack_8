@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get_it/get_it.dart';
 import 'package:go_router/go_router.dart';
 import 'package:prack_8/features/notes/models/note.dart';
 import 'package:prack_8/data/note_repository.dart';
@@ -28,18 +29,13 @@ class _NotesListScreenState extends State<NotesListScreen> {
   void initState() {
     super.initState();
     _controller.addListener(_filterNotes);
-  }
-
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    _filterNotes();  // Начальный вызов фильтрации здесь, чтобы избежать ошибки в initState
+    _filterNotes();
   }
 
   void _filterNotes() {
     final query = _controller.text.toLowerCase();
     setState(() {
-      filteredNotes = NoteInherited.of(context).repository.notes.where((note) {
+      filteredNotes = GetIt.I<NoteRepository>().notes.where((note) {
         final matchesQuery = note.title.toLowerCase().contains(query) ||
             note.content.toLowerCase().contains(query);
         final matchesCategory = _selectedCategory == 'Все категории' ||
@@ -79,7 +75,7 @@ class _NotesListScreenState extends State<NotesListScreen> {
           TextButton(
             onPressed: () {
               setState(() {
-                NoteInherited.of(context).repository.deleteNote(id);
+                GetIt.I<NoteRepository>().deleteNote(id);
                 _filterNotes();
               });
               Navigator.of(context).pop();
@@ -109,11 +105,11 @@ class _NotesListScreenState extends State<NotesListScreen> {
           ),
           IconButton(
             icon: const Icon(Icons.archive),
-            onPressed: () => context.push('/archive'),
+            onPressed: () => context.push('/archive').then((_)=> setState(() => _filterNotes())),
           ),
           IconButton(
             icon: const Icon(Icons.favorite),
-            onPressed: () => context.push('/favorites'),
+            onPressed: () => context.push('/favorites').then((_)=> setState(() => _filterNotes())),
           ),
         ],
       ),

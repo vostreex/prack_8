@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get_it/get_it.dart';
 import 'package:go_router/go_router.dart';
 import 'package:prack_8/features/notes/models/note.dart';
 import 'package:prack_8/data/note_repository.dart';
@@ -94,7 +95,7 @@ class _AddNoteScreenState extends State<AddNoteScreen> {
                 final title = _titleController.text.trim();
                 final content = _contentController.text.trim();
                 if (title.isNotEmpty && content.isNotEmpty) {
-                  NoteInherited.of(context).repository.addNote(
+                  GetIt.I<NoteRepository>().addNote(
                     Note(
                       title: title,
                       content: content,

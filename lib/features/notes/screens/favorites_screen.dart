@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get_it/get_it.dart';
 import 'package:go_router/go_router.dart';
 import 'package:prack_8/features/notes/models/note.dart';
 import 'package:prack_8/data/note_repository.dart';
@@ -24,18 +25,13 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
   void initState() {
     super.initState();
     _controller.addListener(_filterNotes);
-  }
-
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    _filterNotes();  // Начальный вызов фильтрации здесь, чтобы избежать ошибки в initState
+    _filterNotes();
   }
 
   void _filterNotes() {
     final query = _controller.text.toLowerCase();
     setState(() {
-      filteredNotes = NoteInherited.of(context).repository.notes.where((note) {
+      filteredNotes = GetIt.I<NoteRepository>().notes.where((note) {
         final matchesQuery = note.title.toLowerCase().contains(query) ||
             note.content.toLowerCase().contains(query);
         final matchesCategory = _selectedCategory == 'Все категории' ||
