@@ -1,13 +1,13 @@
 import 'package:prack_8/features/notes/models/note.dart';
 
 class NoteRepository {
-  static final List<Note> notes = [];
+  final List<Note> notes = [];  // Экземплярное поле вместо static
 
-  static void addNote(Note note) {
+  void addNote(Note note) {
     notes.add(note);
   }
 
-  static void updateNote(String id, Note updatedNote) {
+  void updateNote(String id, Note updatedNote) {
     final index = notes.indexWhere((note) => note.id == id);
     if (index != -1) {
       notes[index] = Note(
@@ -22,11 +22,11 @@ class NoteRepository {
     }
   }
 
-  static void deleteNote(String id) {
+  void deleteNote(String id) {
     notes.removeWhere((note) => note.id == id);
   }
 
-  static void toggleFavorite(String id) {
+  void toggleFavorite(String id) {
     final index = notes.indexWhere((note) => note.id == id);
     if (index != -1) {
       notes[index] = Note(
@@ -41,7 +41,7 @@ class NoteRepository {
     }
   }
 
-  static void toggleArchive(String id) {
+  void toggleArchive(String id) {
     final index = notes.indexWhere((note) => note.id == id);
     if (index != -1) {
       notes[index] = Note(
