@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:prack_8/features/notes/models/note.dart';
 import 'package:prack_8/data/note_repository.dart';
+import 'package:prack_8/features/notes/widgets/note_inherited.dart';
 
 class NoteTile extends StatelessWidget {
   final Note note;
@@ -99,7 +100,7 @@ class NoteTile extends StatelessWidget {
               size: 24.0,
             ),
             onPressed: () {
-              NoteRepository.toggleFavorite(note.id);
+              NoteInherited.of(context).repository.toggleFavorite(note.id);
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(
                   content: Text(
@@ -119,7 +120,7 @@ class NoteTile extends StatelessWidget {
               size: 24.0,
             ),
             onPressed: () {
-              NoteRepository.toggleArchive(note.id);
+              NoteInherited.of(context).repository.toggleArchive(note.id);
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(
                   content: Text(

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:prack_8/features/notes/models/note.dart';
 import 'package:prack_8/data/note_repository.dart';
+import 'package:prack_8/features/notes/widgets/note_inherited.dart';
 
 import '../widgets/category_dropdown.dart';
 import 'notes_list_screen.dart';
@@ -93,7 +94,7 @@ class _AddNoteScreenState extends State<AddNoteScreen> {
                 final title = _titleController.text.trim();
                 final content = _contentController.text.trim();
                 if (title.isNotEmpty && content.isNotEmpty) {
-                  NoteRepository.addNote(
+                  NoteInherited.of(context).repository.addNote(
                     Note(
                       title: title,
                       content: content,
@@ -102,7 +103,7 @@ class _AddNoteScreenState extends State<AddNoteScreen> {
                   );
                   _titleController.clear();
                   _contentController.clear();
-                  context.pushReplacement('/notes');
+                  context.pop('/notes');
                 } else {
                   ScaffoldMessenger.of(context).showSnackBar(
                     const SnackBar(content: Text('Заполните оба поля')),

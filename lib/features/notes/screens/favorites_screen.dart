@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:prack_8/features/notes/models/note.dart';
 import 'package:prack_8/data/note_repository.dart';
+import '../widgets/note_inherited.dart';
 import 'edit_note_screen.dart';
 import '../widgets/note_list_view.dart';
 import '../widgets/category_dropdown.dart';
@@ -22,14 +23,19 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
   @override
   void initState() {
     super.initState();
-    _filterNotes();
     _controller.addListener(_filterNotes);
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    _filterNotes();  // Начальный вызов фильтрации здесь, чтобы избежать ошибки в initState
   }
 
   void _filterNotes() {
     final query = _controller.text.toLowerCase();
     setState(() {
-      filteredNotes = NoteRepository.notes.where((note) {
+      filteredNotes = NoteInherited.of(context).repository.notes.where((note) {
         final matchesQuery = note.title.toLowerCase().contains(query) ||
             note.content.toLowerCase().contains(query);
         final matchesCategory = _selectedCategory == 'Все категории' ||
@@ -69,7 +75,7 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
           TextButton(
             onPressed: () {
               setState(() {
-                NoteRepository.deleteNote(id);
+                NoteInherited.of(context).repository.deleteNote(id);
                 _filterNotes();
               });
               Navigator.of(context).pop();
